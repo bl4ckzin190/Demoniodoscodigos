@@ -1,51 +1,41 @@
-const jsonPath = "data/azul.json";
-const cor = "azul";
+const bancoAzul = [
+    {
+        pergunta: "Qual é o resultado de 5 + 7?",
+        opcoes: ["10", "11", "12", "14"],
+        correta: 2,
+        recompensa: "A = #"
+    },
+    {
+        pergunta: "Qual comando exibe texto no console?",
+        opcoes: ["print()", "echo()", "console.log()", "display()"],
+        correta: 2,
+        recompensa: "B = %"
+    }
+];
 
-carregarQuestoes();
+// Escolhe questão aleatória
+const questao = bancoAzul[Math.floor(Math.random() * bancoAzul.length)];
 
-function carregarQuestoes() {
-  if (localStorage.getItem(`respondido_${cor}`)) {
-    document.body.innerHTML = "<h2>Você já respondeu esta questão azul!</h2>";
-    return;
-  }
+document.getElementById("pergunta").innerText = questao.pergunta;
 
-  fetch(jsonPath)
-    .then(r => r.json())
-    .then(questoes => {
-      const q = questoes[Math.floor(Math.random() * questoes.length)];
+const opcoesDiv = document.getElementById("opcoes");
 
-      document.getElementById("pergunta").textContent = q.pergunta;
+questao.opcoes.forEach((op, index) => {
+    const btn = document.createElement("button");
+    btn.innerText = op;
 
-      const alternativasDiv = document.getElementById("alternativas");
+    btn.onclick = () => {
+        marcarRespondido();
 
-      q.alternativas.forEach((txt, i) => {
-        const btn = document.createElement("button");
-        btn.textContent = txt;
-        btn.classList.add("botao");
-        btn.onclick = () => responder(i, q);
-        alternativasDiv.appendChild(btn);
-      });
-    });
-}
+        if (index === questao.correta) {
+            opcoesDiv.innerHTML = `
+                <p>Resposta correta!</p>
+                <p>${questao.recompensa}</p>
+            `;
+        } else {
+            opcoesDiv.innerHTML = "<p>Resposta errada!</p>";
+        }
+    };
 
-function responder(i, questao) {
-  if (localStorage.getItem(`respondido_${cor}`)) return;
-
-  const result = document.getElementById("resultado");
-
-  if (i === questao.correta) {
-    result.textContent = "Correto! Código obtido: " + questao.resposta_codigo;
-    salvarCodigo(questao.resposta_codigo);
-  } else {
-    result.textContent = "Resposta incorreta. Nenhum código ganho.";
-  }
-
-  localStorage.setItem(`respondido_${cor}`, true);
-  document.getElementById("prosseguir").style.display = "block";
-}
-
-function salvarCodigo(cod) {
-  const lista = JSON.parse(localStorage.getItem("codigos") || "[]");
-  lista.push(cod);
-  localStorage.setItem("codigos", JSON.stringify(lista));
-}
+    opcoesDiv.appendChild(btn);
+});
