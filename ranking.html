@@ -1,0 +1,26 @@
+<html lang="pt-br">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ranking Global</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <h1>RANKING GLOBAL</h1>
+  <a href="index.html" class="btn">Voltar</a>
+</header>
+
+<main style="padding:28px;max-width:900px;margin:0 auto">
+  <div class="card rank">
+    <table id="rankTable" style="width:100%;border-collapse:collapse">
+      <thead>
+        <tr><th>Pos</th><th>Nome</th><th>Tempo (s)</th><th>Data</th></tr>
+      </thead>
+      <tbody id="rankBody"></tbody>
+    </table>
+    <p class="note" style="margin-top:12px">O histórico não é excluído automaticamente.</p>
+  </div>
+</main>
+
+<script src="ranking.js"></script>
+</body>
+</html>
