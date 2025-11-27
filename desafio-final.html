@@ -1,0 +1,38 @@
+<html lang="pt-br">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Desafio Final</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <h1>DESAFIO FINAL • VERDE</h1>
+  <a href="index.html" class="btn">Voltar</a>
+</header>
+
+<main style="padding:28px;max-width:900px;margin:0 auto">
+  <div class="card final">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <strong>Tempo restante</strong>
+        <div id="timer" style="font-size:22px;margin-top:6px">20:00</div>
+      </div>
+      <div>
+        <strong>Desafio</strong>
+        <p id="desafioTxt" style="max-width:420px">Descriptografe: %*@%#* (exemplo)</p>
+      </div>
+    </div>
+
+    <div style="margin-top:18px">
+      <input id="finalResp" class="input" placeholder="Digite a resposta final">
+      <div style="margin-top:10px" class="center">
+        <button id="sendBtn" class="btn">Enviar</button>
+      </div>
+      <p id="finalMsg" style="margin-top:12px"></p>
+    </div>
+  </div>
+</main>
+
+<script src="common.js"></script>
+<script src="desafio-final.js"></script>
+</body>
+</html>
