@@ -1,23 +1,18 @@
-<html lang="pt-br">
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Codigo Vermelho</title>
-<link rel="stylesheet" href="questoes.css">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="questoes.css">
+    <script src="../js/anti-refresh.js" defer></script>
+    <script src="../js/questoes-vermelhas.js" defer></script>
 </head>
 <body>
 
-<div id="container" class="terminal-box">
-  <h1 class="titulo">Questão Vermelha</h1>
-  <p id="pergunta"></p>
-  <div id="alternativas"></div>
-  <p id="resultado"></p>
-
-  <button id="prosseguir" style="display:none;" onclick="window.location='decodificador.html'">
-    Continuar para o Decodificador
-  </button>
+<div class="container">
+    <h2>Questão Vermelha</h2>
+    <div id="pergunta"></div>
+    <div id="opcoes"></div>
 </div>
-
-<script src="questao-vermelho.js"></script>
 
 </body>
 </html>
