@@ -1,51 +1,35 @@
-const jsonPath = "data/roxo.json";
-const cor = "roxo";
+const bancoRoxo = [
+    {
+        pergunta: "Qual símbolo representa igualdade em programação?",
+        opcoes: ["=", "==", "===", ":"],
+        correta: 2,
+        recompensa: "D = @"
+    }
+];
 
-carregarQuestoes();
+const questao = bancoRoxo[Math.floor(Math.random() * bancoRoxo.length)];
 
-function carregarQuestoes() {
-  if (localStorage.getItem(`respondido_${cor}`)) {
-    document.body.innerHTML = "<h2>Você já respondeu esta questão roxa!</h2>";
-    return;
-  }
+document.getElementById("pergunta").innerText = questao.pergunta;
 
-  fetch(jsonPath)
-    .then(r => r.json())
-    .then(questoes => {
-      const q = questoes[Math.floor(Math.random() * questoes.length)];
+const opcoesDiv = document.getElementById("opcoes");
 
-      document.getElementById("pergunta").textContent = q.pergunta;
+questao.opcoes.forEach((op, index) => {
+    const btn = document.createElement("button");
+    btn.innerText = op;
 
-      const alternativasDiv = document.getElementById("alternativas");
+    btn.onclick = () => {
+        marcarRespondido();
 
-      q.alternativas.forEach((txt, i) => {
-        const btn = document.createElement("button");
-        btn.textContent = txt;
-        btn.classList.add("botao");
-        btn.onclick = () => responder(i, q);
-        alternativasDiv.appendChild(btn);
-      });
-    });
-}
+        if (index === questao.correta) {
+            opcoesDiv.innerHTML = `
+                <p>Resposta correta!</p>
+                <p>${questao.recompensa}</p>
+            `;
+        } else {
+            opcoesDiv.innerHTML = "<p>Resposta errada!</p>";
+        }
+    };
 
-function responder(i, questao) {
-  if (localStorage.getItem(`respondido_${cor}`)) return;
+    opcoesDiv.appendChild(btn);
+});
 
-  const result = document.getElementById("resultado");
-
-  if (i === questao.correta) {
-    result.textContent = "Correto! Código obtido: " + questao.resposta_codigo;
-    salvarCodigo(questao.resposta_codigo);
-  } else {
-    result.textContent = "Resposta incorreta.";
-  }
-
-  localStorage.setItem(`respondido_${cor}`, true);
-  document.getElementById("prosseguir").style.display = "block";
-}
-
-function salvarCodigo(cod) {
-  const lista = JSON.parse(localStorage.getItem("codigos") || "[]");
-  lista.push(cod);
-  localStorage.setItem("codigos", JSON.stringify(lista));
-}
