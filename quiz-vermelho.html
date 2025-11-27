@@ -1,0 +1,92 @@
+<html lang="pt-br">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quiz Azul</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <h1>QUIZ • VERMELHO</h1>
+  <a href="index.html" class="btn">Voltar</a>
+</header>
+
+<main style="padding:28px;max-width:900px;margin:0 auto">
+  <div id="quizBox" class="card azul">
+    <h2 id="titulo">Codificação Azul</h2>
+
+    <div id="questaoWrap">
+      <p id="questaoTxt"></p>
+      <input id="respostaTxt" class="input" placeholder="Digite sua resposta (sensível a conteúdo)"/>
+      <div style="margin-top:10px" class="center">
+        <button id="enviarBtn" class="btn">Enviar</button>
+        <small class="note">Só é permitido responder uma vez por card (localStorage).</small>
+      </div>
+      <p id="feedback" style="margin-top:12px"></p>
+    </div>
+
+    <hr style="margin:16px 0">
+    <div>
+      <strong>Seus símbolos (salvos):</strong>
+      <div id="meusSimbolos" style="margin-top:8px"></div>
+    </div>
+  </div>
+</main>
+
+<script src="quiz-data.js"></script>
+<script src="common.js"></script>
+<script>
+  // quiz-azul logic (page-specific)
+  const COLOR = "vermelho";
+  const perguntas = QUIZ_BANK[COLOR];
+  const simbolos = SYMBOLS[COLOR];
+
+  // escolhe pergunta aleatória
+  const atual = perguntas[Math.floor(Math.random()*perguntas.length)];
+  document.getElementById("questaoTxt").innerText = atual.q;
+
+  // impede múltiplas respostas (por card): usamos key com timestamp (simulando card único)
+  const CARD_KEY = `card_${COLOR}_last`; // simplificação: permite resposta única por usuário para o "card" atual
+  const alreadyAnswered = localStorage.getItem(CARD_KEY);
+
+  const feedback = document.getElementById("feedback");
+  const simbolosDiv = document.getElementById("meusSimbolos");
+
+  function renderMySymbols(){
+    const arr = JSON.parse(localStorage.getItem(`codigo_${COLOR}`) || "[]");
+    simbolosDiv.innerText = arr.join(" ") || "(nenhum)";
+  }
+  renderMySymbols();
+
+  document.getElementById("enviarBtn").addEventListener("click", ()=>{
+    if (alreadyAnswered) {
+      feedback.innerText = "Você já respondeu este card (só é permitido 1 tentativa).";
+      return;
+    }
+
+    const r = document.getElementById("respostaTxt").value.trim().toLowerCase();
+    localStorage.setItem(CARD_KEY, "answered");
+
+    if (r === atual.a.toLowerCase()) {
+      // acerto: sortear símbolo e salvar
+      const s = simbolos[Math.floor(Math.random()*simbolos.length)];
+      saveCode(COLOR, s);
+      feedback.innerText = `Correto. Símbolo obtido: ${s}`;
+
+      // chance de bônus
+      BONUS.forEach(b => {
+        if (Math.random() < (b.chance || 0)) {
+          // apenas se a recompensa existir
+          saveCode(b.reward.color, b.reward.symbol);
+          feedback.innerText += `\nBÔNUS: ${b.reward.note} (${b.reward.symbol})`;
+        }
+      });
+
+      renderMySymbols();
+    } else {
+      feedback.innerText = "Errado. Nenhum símbolo concedido.";
+    }
+  });
+</script>
+</body>
+</html>
